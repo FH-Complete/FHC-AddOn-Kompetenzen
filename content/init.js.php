@@ -20,56 +20,98 @@
 /**
  * Initialisierung des Addons
  */
-?>
-addon.push( 
+
+require_once('../../../config/vilesci.config.inc.php');
+require_once('../../../include/benutzerberechtigung.class.php');
+
+$user = get_uid();
+$rechte = new benutzerberechtigung();
+$rechte->getBerechtigungen($user);
+
+if($rechte->isBerechtigt('addon/kompetenzen'))
 {
-	init: function() 
-	{
-		// Hinzufuegen eines zusaetzlichen Tabs bei Mitarbeitern mit einem Label darin
-		var tabitem = document.createElement("tab");
-		tabitem.setAttribute("id","addon-kompetenzen-tab-mitarbeiter");
-		tabitem.setAttribute("label","Kompetenzen");
-		var mitarbeitertabs = document.getElementById("mitarbeiter-tabs");
-		mitarbeitertabs.appendChild(tabitem);
+	echo '
+		addon.push( 
+		{
+			init: function() 
+			{
+				// Hinzufuegen eines zusaetzlichen Tabs bei Mitarbeitern mit einem Label darin
+				var tabitem = document.createElement("tab");
+				tabitem.setAttribute("id","addon-kompetenzen-tab-mitarbeiter");
+				tabitem.setAttribute("label","Kompetenzen");
+				var mitarbeitertabs = document.getElementById("mitarbeiter-tabs");
+				mitarbeitertabs.appendChild(tabitem);
+		
+				var mitarbeiteriframe = document.createElement("iframe");
+				mitarbeiteriframe.setAttribute("id","addon-kompetenzen-tabpannel-mitarbeiter-iframe");
+		
+				var mitarbeitertabpanels=document.getElementById("mitarbeiter-tabpanels-main");
+				mitarbeitertabpanels.appendChild(mitarbeiteriframe);
+		
+		
+				var tabitem = document.createElement("tab");
+				tabitem.setAttribute("id","addon-kompetenzen-tab-student");
+				tabitem.setAttribute("label","Kompetenzen");
+				var studierendentabs = document.getElementById("student-content-tabs");
+				studierendentabs.appendChild(tabitem);
+		
+				var studierendeniframe = document.createElement("iframe");
+				studierendeniframe.setAttribute("id","addon-kompetenzen-tabpannel-student-iframe");
+		
+				var studierendentabpanels=document.getElementById("student-tabpanels-main");
+				studierendentabpanels.appendChild(studierendeniframe);
+			},
+			selectMitarbeiter: function(person_id, mitarbeiter_uid)
+			{
+				//alert("Addon Kompetenzen SelectStudent "+prestudent_id+" personID "+person_id+" uid "+student_uid);
+				var iframe = document.getElementById("addon-kompetenzen-tabpannel-mitarbeiter-iframe");
+				iframe.setAttribute("src","../addons/kompetenzen/content/kompetenzen.xul.php?person_id="+person_id);
+			},
+			selectStudent: function(person_id, prestudent_id, student_uid)
+			{
+				//alert("Addon Kompetenzen SelectStudent "+prestudent_id+" personID "+person_id+" uid "+student_uid);
+				var iframe = document.getElementById("addon-kompetenzen-tabpannel-student-iframe");
+				iframe.setAttribute("src","../addons/kompetenzen/content/kompetenzen.xul.php?person_id="+person_id);
+			},
+			selectVerband: function(item)
+			{
+			},
+			selectInstitut: function(institut)
+			{
+			},
+			selectLektor: function(lektor)
+			{
+			}
+		});	
+	';
+}
+else 
+{
+	echo '
+		addon.push( 
+		{
+			init: function() 
+			{
+				// Diese Funktion wird nach dem Laden des FAS aufgerufen
+			},
+			selectMitarbeiter: function(person_id, mitarbeiter_uid)
+			{
+			},
+			selectStudent: function(person_id, prestudent_id, student_uid)
+			{
+			},
+			selectVerband: function(item)
+			{
+			},
+			selectInstitut: function(institut)
+			{
+			},
+			selectLektor: function(lektor)
+			{
+			}
+		});	
+	';
+}
 
-		var mitarbeiteriframe = document.createElement("iframe");
-		mitarbeiteriframe.setAttribute("id","addon-kompetenzen-tabpannel-mitarbeiter-iframe");
 
-		var mitarbeitertabpanels=document.getElementById("mitarbeiter-tabpanels-main");
-		mitarbeitertabpanels.appendChild(mitarbeiteriframe);
-
-
-		var tabitem = document.createElement("tab");
-		tabitem.setAttribute("id","addon-kompetenzen-tab-student");
-		tabitem.setAttribute("label","Kompetenzen");
-		var studierendentabs = document.getElementById("student-content-tabs");
-		studierendentabs.appendChild(tabitem);
-
-		var studierendeniframe = document.createElement("iframe");
-		studierendeniframe.setAttribute("id","addon-kompetenzen-tabpannel-student-iframe");
-
-		var studierendentabpanels=document.getElementById("student-tabpanels-main");
-		studierendentabpanels.appendChild(studierendeniframe);
-	},
-	selectMitarbeiter: function(person_id, mitarbeiter_uid)
-	{
-		//alert("Addon Kompetenzen SelectStudent "+prestudent_id+" personID "+person_id+" uid "+student_uid);
-		var iframe = document.getElementById("addon-kompetenzen-tabpannel-mitarbeiter-iframe");
-		iframe.setAttribute("src","../addons/kompetenzen/content/kompetenzen.xul.php?person_id="+person_id);
-	},
-	selectStudent: function(person_id, prestudent_id, student_uid)
-	{
-		//alert("Addon Kompetenzen SelectStudent "+prestudent_id+" personID "+person_id+" uid "+student_uid);
-		var iframe = document.getElementById("addon-kompetenzen-tabpannel-student-iframe");
-		iframe.setAttribute("src","../addons/kompetenzen/content/kompetenzen.xul.php?person_id="+person_id);
-	},
-	selectVerband: function(item)
-	{
-	},
-	selectInstitut: function(institut)
-	{
-	},
-	selectLektor: function(lektor)
-	{
-	}
-});
+?>
