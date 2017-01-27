@@ -187,6 +187,7 @@ if($result = $db->db_query("SELECT * FROM system.tbl_berechtigung WHERE berechti
 	}
 }
 
+// DMS-Kategorie fuer Kompetenzen-Dokumente anlegen
 if($result = @$db->db_query("SELECT 1 FROM campus.tbl_dms_kategorie WHERE kategorie_kurzbz='Kompetenzen' LIMIT 1"))
 {
 	if($db->db_num_rows($result)==0)
