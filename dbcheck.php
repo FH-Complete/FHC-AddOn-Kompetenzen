@@ -187,6 +187,21 @@ if($result = $db->db_query("SELECT * FROM system.tbl_berechtigung WHERE berechti
 	}
 }
 
+if($result = @$db->db_query("SELECT 1 FROM campus.tbl_dms_kategorie WHERE kategorie_kurzbz='Kompetenzen' LIMIT 1"))
+{
+	if($db->db_num_rows($result)==0)
+	{
+		$qry = "
+		INSERT INTO campus.tbl_dms_kategorie(kategorie_kurzbz,bezeichnung,beschreibung,parent_kategorie_kurzbz) VALUES('Kompetenzen','Kompetenzen','Dokumente zu Kompetenzen',NULL);
+		";
+
+		if(!$db->db_query($qry))
+			echo '<strong>campus.tbl_dms_kategorie '.$db->db_last_error().'</strong><br>';
+		else
+			echo ' campus.tbl_dms_kategorie: Kategorie Kompetenzen angelegt. <font style="color:red"><b>Sie sollten den Zugriff auf diese Kategorie mit einer Gruppe (zB CMS_LOCK) sperren</b></font><br>';
+	}
+}
+
 echo '<br>Aktualisierung abgeschlossen<br><br>';
 echo '<h2>Gegenprüfung</h2>';
 
