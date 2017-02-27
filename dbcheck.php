@@ -45,7 +45,7 @@ $uid = get_uid();
 $rechte = new benutzerberechtigung();
 $rechte->getBerechtigungen($uid);
 
-if(!$rechte->isBerechtigt('basis/addon'))
+if(!$rechte->isBerechtigt('basis/addon', null, 'suid'))
 {
 	exit('Sie haben keine Berechtigung für die Verwaltung von Addons');
 }
@@ -61,10 +61,10 @@ if($result = $db->db_query("SELECT schema_name FROM information_schema.schemata 
 				GRANT USAGE ON SCHEMA addon TO vilesci;
 				GRANT USAGE ON SCHEMA addon TO web;
 				";
-		
+
 		if(!$db->db_query($qry))
 			echo '<strong>Schema addon: '.$db->db_last_error().'</strong><br>';
-		else 
+		else
 			echo ' Neues Schema addon hinzugefügt<br>';
 	}
 }
@@ -124,7 +124,7 @@ if(!$result = @$db->db_query("SELECT 1 FROM addon.tbl_kompetenz"))
 			ALTER TABLE addon.tbl_kompetenzerwerbstyp ADD CONSTRAINT pk_kompetenzerwerbstyp PRIMARY KEY (kompetenzerwerbstyp_kurzbz);
 
 			GRANT SELECT, UPDATE, INSERT, DELETE ON addon.tbl_kompetenzerwerbstyp TO vilesci;
-			
+
 			CREATE TABLE addon.tbl_kompetenz
 			(
 				kompetenz_id integer NOT NULL,
@@ -167,7 +167,7 @@ if(!$result = @$db->db_query("SELECT 1 FROM addon.tbl_kompetenz"))
 
 	if(!$db->db_query($qry))
 		echo '<strong>kompetenzen: '.$db->db_last_error().'</strong><br>';
-	else 
+	else
 		echo ' Tabellen fuer Kompetenz Addon hinzugefuegt!<br>';
 
 }
@@ -177,12 +177,12 @@ if($result = $db->db_query("SELECT * FROM system.tbl_berechtigung WHERE berechti
 {
 	if($db->db_num_rows($result)==0)
 	{
-		$qry = "INSERT INTO system.tbl_berechtigung(berechtigung_kurzbz, beschreibung) 
+		$qry = "INSERT INTO system.tbl_berechtigung(berechtigung_kurzbz, beschreibung)
 				VALUES('addon/kompetenzen','Addon Kompetenzen');";
 
 		if(!$db->db_query($qry))
 			echo '<strong>Berechtigung: '.$db->db_last_error().'</strong><br>';
-		else 
+		else
 			echo 'Neue Berechtigung addon/kompetenzen hinzugefuegt!<br>';
 	}
 }
@@ -200,6 +200,21 @@ if($result = @$db->db_query("SELECT 1 FROM campus.tbl_dms_kategorie WHERE katego
 			echo '<strong>campus.tbl_dms_kategorie '.$db->db_last_error().'</strong><br>';
 		else
 			echo ' campus.tbl_dms_kategorie: Kategorie Kompetenzen angelegt. <font style="color:red"><b>Sie sollten den Zugriff auf diese Kategorie mit einer Gruppe (zB CMS_LOCK) sperren</b></font><br>';
+	}
+}
+
+//Neue Berechtigung für das Addon hinzufügen
+if($result = $db->db_query("SELECT * FROM system.tbl_berechtigung WHERE berechtigung_kurzbz='addon/kompetenzenAdmin'"))
+{
+	if($db->db_num_rows($result)==0)
+	{
+		$qry = "INSERT INTO system.tbl_berechtigung(berechtigung_kurzbz, beschreibung)
+				VALUES('addon/kompetenzenAdmin','Addon Kompetenzen Administration');";
+
+		if(!$db->db_query($qry))
+			echo '<strong>Berechtigung: '.$db->db_last_error().'</strong><br>';
+		else
+			echo 'Neue Berechtigung addon/kompetenzen hinzugefuegt!<br>';
 	}
 }
 

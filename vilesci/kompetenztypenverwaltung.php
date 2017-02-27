@@ -39,7 +39,7 @@ $rechte->getBerechtigungen($uid);
 
 $db = new basis_db();
 
-if(!$rechte->isBerechtigt('basis/addon'))
+if(!$rechte->isBerechtigt('addon/kompetenzenAdmin',null,'suid'))
 {
 	die('Sie haben keine Berechtigung fuer diese Seite');
 }
@@ -57,7 +57,7 @@ if(isset($_POST['save_kompetenztyp']))
 	$kompetenztyp_kurzbz = $_POST['kompetenztyp_kurzbz'];
 	$bezeichnung = $_POST['bezeichnung'];
 	$kompetenztyp_parent_id = $_POST['kompetenztyp_parent_id'];
-	
+
 	$kompetenz = new kompetenz();
 	if($kompetenztyp_id!='')
 	{
@@ -66,10 +66,10 @@ if(isset($_POST['save_kompetenztyp']))
 	}
 	else
 		$kompetenz->new=true;
-	
+
 	$kompetenz->kompetenztyp_kurzbz=$kompetenztyp_kurzbz;
 	$kompetenz->bezeichnung = $bezeichnung;
-	
+
 	$kompetenz->kompetenztyp_parent_id = $kompetenztyp_parent_id;
 	if($kompetenz->saveTyp())
 	{
@@ -89,7 +89,7 @@ if($action=='deletetyp')
 		echo '<span class="ok">Erfolgreich entfernt</span>';
 	else
 		echo '<span class="error">Fehler beim Entfernen:'.$kompetenz->errormsg.'</span>';
-		
+
 	$id='';
 }
 
@@ -106,7 +106,7 @@ foreach($kompetenztyp->kompetenztypen as $row)
 	{
 		// Root Nodes
 		echo '<li>';
-		printItem($row['kompetenztyp_id'], $row['bezeichnung']);		
+		printItem($row['kompetenztyp_id'], $row['bezeichnung']);
 		addChilds($row['kompetenztyp_id']);
 		echo '</li>';
 	}
@@ -116,7 +116,7 @@ echo '</ul>';
 function printItem($kompetenztyp_id, $bezeichnung)
 {
 	global $db, $id;
-	 
+
 	if($id==$kompetenztyp_id)
 		$style='style="text-decoration: underline"';
 	else
@@ -130,7 +130,7 @@ function printItem($kompetenztyp_id, $bezeichnung)
 function addChilds($id)
 {
 	global $data, $kompetenztyp, $db;
-	
+
 	echo '<ul>';
 	foreach($kompetenztyp->kompetenztypen as $row)
 	{
@@ -154,7 +154,7 @@ echo '</td>
 /*if($action=='edittyp' || $action=='typneu' || $action=='niveaustufen' || $action=='niveaustufenedit')
 {*/
 	$kompetenz = new kompetenz();
-	
+
 	if($id!='')
 	{
 		echo '<h2>Bearbeiten des Typs</h2>';
@@ -165,8 +165,8 @@ echo '</td>
 	}
 	else
 		echo '<h2>Neuer Typ</h2>';
-	
-	
+
+
 	echo '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
 	echo '<input type="hidden" name="kompetenztyp_id" value="'.$db->convert_html_chars($kompetenz->kompetenztyp_id).'" />';
 	echo '<table>';
@@ -180,7 +180,7 @@ echo '</td>
 			$selected = 'selected';
 		else
 			$selected='';
-		
+
 		echo '<option value="'.$row->kompetenztyp_id.'" '.$selected.'>'.$db->convert_html_chars($row->bezeichnung).'</option>';
 	}
 	echo '</select></td></tr>';
@@ -192,7 +192,7 @@ echo '</td>
 	{
 		echo '<br><br><a href="kompetenztypenverwaltung.php?action=niveaustufen&id='.$id.'">Niveaustufen editieren</a>';
 	}*/
-	
+
 //}
 
 // Speichern von Niveaustufen
@@ -200,7 +200,7 @@ if($action=='niveaustufesave')
 {
 	$stufe = $_POST['stufe'];
 	$kompetenzniveaustufe_id= (isset($_POST['kompetenzniveaustufe_id'])?$_POST['kompetenzniveaustufe_id']:'');
-	
+
 	$kompetenz = new kompetenz();
 	if($kompetenzniveaustufe_id!='')
 	{
@@ -212,13 +212,13 @@ if($action=='niveaustufesave')
 		$kompetenz->new=true;
 		$kompetenz->kompetenztyp_id=$id;
 	}
-	
+
 	$kompetenz->stufe=$stufe;
 	if($kompetenz->saveNiveaustufe())
 		echo '<span class="ok">Daten erfolgreich gespeichert</span>';
 	else
 		echo '<span class="error">Fehler beim Speichern der Daten:'.$kompetenz->errormsg.'</span>';
-	
+
 	$action='niveaustufen';
 }
 
@@ -246,9 +246,9 @@ if($action=='niveaustufen' || $action=='niveaustufenedit' || $action=='edittyp')
 {
 	$kompetenz = new kompetenz();
 	if($kompetenz->loadTyp($id))
-	{	
+	{
 		echo '<h2>Niveaustufen von '.$kompetenz->bezeichnung.'</h2>';
-		
+
 		$kompetenz->getNiveaustufe($id);
 		echo '<ul>';
 		foreach($kompetenz->result as $row)
@@ -260,7 +260,7 @@ if($action=='niveaustufen' || $action=='niveaustufenedit' || $action=='edittyp')
 				<input type="hidden" name="kompetenzniveaustufe_id" value="'.$db->convert_html_chars($row->kompetenzniveaustufe_id).'" />
 				<input type="text" name="stufe" size="10" maxlength="64" value="'.$db->convert_html_chars($row->stufe).'" />
 				<input type="submit" name="save" value="ändern" />
-				</form></li>';				
+				</form></li>';
 			}
 			else
 			{

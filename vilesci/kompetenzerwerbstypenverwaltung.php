@@ -39,7 +39,7 @@ $rechte->getBerechtigungen($uid);
 
 $db = new basis_db();
 
-if(!$rechte->isBerechtigt('basis/addon'))
+if(!$rechte->isBerechtigt('addon/kompetenzenAdmin',null,'suid'))
 {
 	die('Sie haben keine Berechtigung fuer diese Seite');
 }
@@ -50,14 +50,14 @@ if(isset($_POST['save']))
 {
 	if(isset($_POST['kompetenzerwerbstyp_kurzbz']))
 		$kompetenzerwerbstyp_kurzbz = $_POST['kompetenzerwerbstyp_kurzbz'];
-	
+
 	if(isset($_POST['kompetenzerwerbstyp_kurzbz_original']))
 		$kompetenzerwerbstyp_kurzbz_original = $_POST['kompetenzerwerbstyp_kurzbz_original'];
 	else
 		$kompetenzerwerbstyp_kurzbz_original = '';
-	
+
 	$bezeichnung = $_POST['bezeichnung'];
-	
+
 	$kompetenz = new kompetenz();
 	if($kompetenzerwerbstyp_kurzbz_original!='')
 	{
@@ -67,10 +67,10 @@ if(isset($_POST['save']))
 	}
 	else
 		$kompetenz->new=true;
-	
+
 	$kompetenz->kompetenzerwerbstyp_kurzbz=$kompetenzerwerbstyp_kurzbz;
 	$kompetenz->bezeichnung = $bezeichnung;
-	
+
 	if($kompetenz->saveErwerbstyp())
 	{
 		echo '<span class="ok">Erfolgreich gespeichert</span>';
@@ -88,7 +88,7 @@ if($action=='delete')
 		if($kompetenz->deleteErwerbstyp($_GET['kompetenzerwerbstyp_kurzbz']))
 			echo '<span class="ok">Erfolgreich entfernt</span>';
 		else
-			echo '<span class="error">Fehler beim Entfernen: '.$kompetenz->errormsg.'</span>';		
+			echo '<span class="error">Fehler beim Entfernen: '.$kompetenz->errormsg.'</span>';
 	}
 }
 
@@ -102,11 +102,11 @@ foreach($erwerbstypen as $kurzbz=>$bezeichnung)
 	{
 		echo '<li>
 		<form action="kompetenzerwerbstypenverwaltung.php?action=save" method="POST">
-		<input type="hidden" name="kompetenzerwerbstyp_kurzbz_original" value="'.$db->convert_html_chars($kurzbz).'" /> 
+		<input type="hidden" name="kompetenzerwerbstyp_kurzbz_original" value="'.$db->convert_html_chars($kurzbz).'" />
 		Bezeichnung <input type="text" name="bezeichnung" maxlength="256" value="'.$db->convert_html_chars($bezeichnung).'" />
 		Kurzbz <input type="text" name="kompetenzerwerbstyp_kurzbz" value="'.$db->convert_html_chars($kurzbz).'" maxlength="32" />
 		<input type="submit" name="save" value="ändern" />
-		</form></li>';				
+		</form></li>';
 	}
 	else
 	{
@@ -128,7 +128,7 @@ Kurzbz <input type="text" name="kompetenzerwerbstyp_kurzbz" value="" maxlength="
 </li>';
 
 echo '</ul>';
-	
+
 echo '
 </body>
 </html>';
