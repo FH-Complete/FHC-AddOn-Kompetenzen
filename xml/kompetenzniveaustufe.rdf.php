@@ -20,7 +20,7 @@
 // header für no cache
 header("Cache-Control: no-cache");
 header("Cache-Control: post-check=0, pre-check=0",false);
-header("Expires Mon, 26 Jul 1997 05:00:00 GMT");
+header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 header("Pragma: no-cache");
 // content type setzen
 header("Content-type: application/xhtml+xml");
@@ -29,7 +29,7 @@ require_once('../../../config/vilesci.config.inc.php');
 require_once('../kompetenz.class.php');
 
 echo '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
-	
+
 $rdf_url='http://www.technikum-wien.at/kompetenzniveaustufe';
 
 echo '
@@ -37,7 +37,7 @@ echo '
 		xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 		xmlns:KPT="'.$rdf_url.'/rdf#"
 	>
-	
+
    <RDF:Seq about="'.$rdf_url.'/liste">';
 
 if(isset($_GET['kompetenztyp_id']))
@@ -66,7 +66,7 @@ if($kompetenz->getNiveaustufe($kompetenztyp_id))
 	            <KPT:stufe><![CDATA['.$row->stufe.']]></KPT:stufe>
 	         </RDF:Description>
 	      </RDF:li>';
-	}	
+	}
 }
 else
 {

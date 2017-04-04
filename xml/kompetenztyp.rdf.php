@@ -20,7 +20,7 @@
 // header für no cache
 header("Cache-Control: no-cache");
 header("Cache-Control: post-check=0, pre-check=0",false);
-header("Expires Mon, 26 Jul 1997 05:00:00 GMT");
+header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 header("Pragma: no-cache");
 // content type setzen
 header("Content-type: application/xhtml+xml");
@@ -29,7 +29,7 @@ require_once('../../../config/vilesci.config.inc.php');
 require_once('../kompetenz.class.php');
 
 echo '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
-	
+
 $rdf_url='http://www.technikum-wien.at/kompetenztyp';
 
 echo '
@@ -37,9 +37,9 @@ echo '
 		xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 		xmlns:KPT="'.$rdf_url.'/rdf#"
 	>
-	
+
    <RDF:Seq about="'.$rdf_url.'/liste">';
-	
+
 $data = array();
 
 $kompetenz = new kompetenz();
@@ -58,7 +58,7 @@ if($kompetenz->getKompetenztypen())
 	         </RDF:Description>
 	      </RDF:li>';
 	}*/
-	
+
 	foreach($kompetenz->kompetenztypen as $row)
 	{
 		if($row['kompetenztyp_parent_id']=='')
@@ -66,12 +66,12 @@ if($kompetenz->getKompetenztypen())
 			//Root Node
 			$row['sortname'] = $row['bezeichnung'];
 			$row['anzeigename'] = $row['bezeichnung'];
-			
+
 			$data[]=$row;
 			addChilds($row['kompetenztyp_id'], 1, $row['sortname'],$row['anzeigename']);
 		}
 	}
-	
+
 	foreach($data as $row)
 	{
 		echo '
@@ -94,7 +94,7 @@ else
 function addChilds($id, $tiefe, $sortname,$parentanzeigename)
 {
 	global $data, $kompetenz;
-	
+
 	foreach($kompetenz->kompetenztypen as $row)
 	{
 		if($row['kompetenztyp_parent_id']==$id)

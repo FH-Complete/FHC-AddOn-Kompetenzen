@@ -20,7 +20,7 @@
 
 header("Cache-Control: no-cache");
 header("Cache-Control: post-check=0, pre-check=0",false);
-header("Expires Mon, 26 Jul 1997 05:00:00 GMT");
+header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 header("Pragma: no-cache");
 header("Content-type: application/vnd.mozilla.xul+xml");
 
@@ -36,10 +36,10 @@ echo '<?xml-stylesheet href="'.APP_ROOT.'content/datepicker/datepicker.css" type
 
 if(isset($_GET['person_id']) && is_numeric($_GET['person_id']))
 	$person_id = $_GET['person_id'];
-else 
+else
 	die('Parameter person_id muss uebergeben werden');
 
-$uid = get_uid(); 
+$uid = get_uid();
 ?>
 
 <window id="addon-kompetenzen-window" title="Kompetenzen"

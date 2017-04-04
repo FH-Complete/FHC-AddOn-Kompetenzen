@@ -20,7 +20,7 @@
 // header für no cache
 header("Cache-Control: no-cache");
 header("Cache-Control: post-check=0, pre-check=0",false);
-header("Expires Mon, 26 Jul 1997 05:00:00 GMT");
+header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 header("Pragma: no-cache");
 // content type setzen
 header("Content-type: application/xhtml+xml");
@@ -31,18 +31,18 @@ require_once('../../../include/datum.class.php');
 
 if(isset($_GET['person_id']))
 	$person_id = $_GET['person_id'];
-else 
+else
 	$person_id = '';
 
 if(isset($_GET['kompetenz_id']))
 	$kompetenz_id = $_GET['kompetenz_id'];
-else 
+else
 	$kompetenz_id = null;
 
 $datum = new datum();
 
 echo '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
-	
+
 $rdf_url='http://www.technikum-wien.at/kompetenzen';
 
 echo '
@@ -50,24 +50,24 @@ echo '
 		xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 		xmlns:KPT="'.$rdf_url.'/rdf#"
 	>
-	
+
    <RDF:Seq about="'.$rdf_url.'/liste">';
-	
-	
+
+
 $kompetenz = new kompetenz();
 if($person_id!='')
 {
 	if($kompetenz->getKompetenzPerson($person_id))
 		foreach ($kompetenz->result as $row)
 			draw_content($row);
-	else 
+	else
 		die($kompetenz->errormsg);
 }
-elseif($kompetenz_id!='') 
+elseif($kompetenz_id!='')
 {
 	if($kompetenz->load($kompetenz_id))
 		draw_content($kompetenz);
-	else 
+	else
 		die($kompetenz->errormsg);
 }
 echo '</RDF:Seq>
@@ -77,7 +77,7 @@ echo '</RDF:Seq>
 function draw_content($row)
 {
 	global $rdf_url, $datum;
-	
+
 	if($row->kompetenzniveaustufe_id!='')
 	{
 		$kompetenz = new kompetenz();
@@ -86,7 +86,7 @@ function draw_content($row)
 	}
 	else
 		$kompetenzniveaustufe='';
-	
+
 	$kompetenz = new kompetenz();
 	$kompetenz->loadTyp($row->kompetenztyp_id);
 	$kompetenztyp = $kompetenz->bezeichnung
