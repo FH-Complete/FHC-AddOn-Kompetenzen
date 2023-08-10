@@ -736,7 +736,7 @@ class kompetenz extends basis_db
 	 */
 	public function deleteErwerbstyp($kompetenzerwerbstyp_kurzbz)
 	{
-		$qry = 'SELECT count(*) as anzahl FROM addon.tbl_kompetenz WHERE kompetenzerwerbstyp_kurzbz='.$this->db_add_param($kompetenzerwerbstyp_kurzbz);
+		$qry = 'SELECT COUNT(*) as anzahl FROM addon.tbl_kompetenz WHERE kompetenzerwerbstyp_kurzbz='.$this->db_add_param($kompetenzerwerbstyp_kurzbz);
 		
 		if($result = $this->db_query($qry))
 		{
